@@ -41,6 +41,12 @@ func handleConvert(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Only POST method is allowed", http.StatusMethodNotAllowed)
 		return
 	}
+	// Ensure it has proper token
+    expectedToken := os.Getenv("API_SECRET_TOKEN")
+    if expectedToken != "" && r.Header.Get("X-API-Key") != expectedToken {
+        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+        return
+    }
 
 	// Parse the uploaded file
 	file, _, err := r.FormFile("file")
