@@ -18,10 +18,11 @@ FROM ubuntu:latest AS runner
 
 ENV GDK_DPI_SCALE=1
 ENV GDK_SCALE=1
+ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y libreoffice fonts-thai-tlwg
+RUN apt-get update && apt-get install -y libreoffice fonts-thai-tlwg ttf-mscorefonts-installer fontconfig && fc-cache -fv
 
 COPY fonts /usr/share/fonts/custom
 
