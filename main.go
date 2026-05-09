@@ -75,8 +75,16 @@ func handleConvert(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Normalize spacing in docx before converting
+	normalizeCmd := exec.Command("python3", "/app/normalize.py", inputFilePath)
+	output, err := normalizeCmd.CombinedOutput()
+	fmt.Println("Normalize output:", string(output))
+	if err != nil {
+		fmt.Println("Normalize error:", err)
+	}
+
 	// Convert the Excel file to PDF using LibreOffice
-	cmd := exec.Command("soffice", "--headless", "--convert-to", "pdf:calc_pdf_Export", inputFilePath, "--outdir", tempDir)
+	cmd := exec.Command("soffice", "--headless", "--convert-to", "pdf:writer_pdf_Export", inputFilePath, "--outdir", tempDir)
 	if err := cmd.Run(); err != nil {
 		fmt.Println(err)
 		http.Error(w, "Failed to convert file to PDF", http.StatusInternalServerError)

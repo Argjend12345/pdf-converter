@@ -22,11 +22,17 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y libreoffice fonts-thai-tlwg ttf-mscorefonts-installer fontconfig && fc-cache -fv
+RUN apt-get update && apt-get install -y \
+    libreoffice \
+    fonts-thai-tlwg \
+    fontconfig \
+    python3
 
 COPY fonts /usr/share/fonts/custom
 
 RUN fc-cache -fv
+
+COPY normalize.py /app/normalize.py
 
 COPY --from=builder /app/pdf-converter /app/pdf-converter
 
